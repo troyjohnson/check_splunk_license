@@ -26,5 +26,7 @@ The Nagios 'check' script:
 
 check_splunk_license.pl
 
+Put it in with all the other Nagios checks (directory usually set in $USER1$).
+
 -- Troy Johnson <troy@jdmz.net>
 
