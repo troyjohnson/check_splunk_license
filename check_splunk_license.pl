@@ -38,7 +38,8 @@ my $good_options = GetOptions(
 if ((not $good_options) or ($need_help)
                 or (not $host) or (not $user) or (not $password)) {
         help_message();
-        exit;
+	# exit with status UNKNOWN
+        exit 3;
 }
 if ($critical !~ m/^[\d]+$/) {
         # error message for nagios

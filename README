@@ -2,6 +2,8 @@
 check_splunk_license
 
 A Nagios check reporting the current licensed usage of a Splunk server.
+Requires a local splunk installation, might work with a forwarder, I don't
+know for sure.
 
 The Nagios 'command' configuration:
 
