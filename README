@@ -1,0 +1,26 @@
+
+check_splunk_license
+
+A Nagios check reporting the current licensed usage of a Splunk server.
+
+The Nagios 'command' configuration:
+
+check_splunk_license.cfg
+
+Configuration for the read protected (usually mode 600) Nagios include file:
+
+resource.cfg
+
+Some configuration options for the 'nagiosgraph' package:
+
+check_splunk_license.ncfg
+alternative_check_splunk_license.ncfg
+
+An example service configuration:
+
+mysplunkserver.cfg
+
+The Nagios 'check' script:
+
+check_splunk_license.pl
+

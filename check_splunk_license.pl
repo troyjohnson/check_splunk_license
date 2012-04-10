@@ -34,9 +34,7 @@ my $good_options = GetOptions(
         'c=i' => \$critical, # numeric
         'help' => \$need_help, #boolean
 );
-#print "good_options=\"${good_options}\"\n";
-#print "need_help=\"${need_help}\"\n";
-#print "host=\"${host}\"\n";
+
 if ((not $good_options) or ($need_help)
                 or (not $host) or (not $user) or (not $password)) {
         help_message();
