@@ -1,0 +1,23 @@
+
+define ngraph{
+        service_name            SplunkLicense
+        graph_perf_regex        usage=\s*([0-9\.]+)
+        graph_value             usage
+        graph_units             MB
+        graph_legend            Log Usage In MB
+        rrd_plottype            AREA
+        rrd_color               339933
+}
+
+define ngraph{
+        service_name            SplunkLicense
+        type                    CDEF
+        graph_value             usage_cdef
+        graph_units
+        graph_legend
+        graph_calc              usage
+        rrd_plottype            LINE1
+        rrd_color               000000
+}
+
+# [EOF]

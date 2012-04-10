@@ -1,0 +1,11 @@
+
+define ngraph {
+        service_name            SplunkLicense
+        graph_log_regex         (\d+\.\d+)\sMB
+        graph_value             usage
+        graph_units             MB
+        graph_legend            Megabytes
+        rrd_plottype            AREA
+        rrd_color               339933
+}
+# [EOF]
