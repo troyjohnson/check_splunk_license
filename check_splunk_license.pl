@@ -2,6 +2,8 @@
 
 # check_splunk_license.pl
 
+# Troy Johnson <troy@jdmz.net>
+
 # modules
 use Getopt::Long;
 use strict;

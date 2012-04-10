@@ -26,3 +26,5 @@ The Nagios 'check' script:
 
 check_splunk_license.pl
 
+-- Troy Johnson <troy@jdmz.net>
+
