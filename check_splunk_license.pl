@@ -17,18 +17,17 @@ my $user = '';
 my $password = '';
 my $host = '';
 my $warning_default = 450;
-my $warning = $warning_default;
+my $warning = 0;
 my $critical_default = 500;
-my $critical = $critical_default;
+my $critical = 0;
 my $splunk_port_default = 8089;
-my $splunk_port = $splunk_port_default;
+my $splunk_port = 0;
 my $splunk_default = '/opt/splunk/bin/splunk';
-my $splunk = $splunk_default;
+my $splunk = '';
 my $need_help = 0;
 my $nagios_status = "OK";
 my $nagios_label = "SPUNKLICENSE";
 my $unit = "MB";
-
 
 # get options
 my $good_options = GetOptions(
@@ -41,6 +40,12 @@ my $good_options = GetOptions(
         'p|port:i' => \$splunk_port, # numeric
         'help' => \$need_help, #boolean
 );
+
+# optional values set to defaults
+$warning = $warning || $warning_default; # 0 not allowed
+$critical = $critical || $critical_default; # 0 not allowed
+$splunk_port = $splunk_port || $splunk_port_default; # 0 not allowed
+$splunk = $splunk || $splunk_default; # empty not allowed
 
 if ((not $good_options) or ($need_help)
                 or (not $host) or (not $user) or (not $password)) {
