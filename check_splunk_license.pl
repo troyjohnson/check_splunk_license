@@ -10,7 +10,6 @@ use strict;
 
 # constants
 my $license_usage = 0;
-my $splunk = '/opt/splunk/bin/splunk';
 my $splunk_command = 'search';
 
 # variables
@@ -21,6 +20,10 @@ my $warning_default = 450;
 my $warning = $warning_default;
 my $critical_default = 500;
 my $critical = $critical_default;
+my $splunk_port_default = 8089;
+my $splunk_port = $splunk_port_default;
+my $splunk_default = '/opt/splunk/bin/splunk';
+my $splunk = $splunk_default;
 my $need_help = 0;
 my $nagios_status = "OK";
 my $nagios_label = "SPUNKLICENSE";
@@ -32,8 +35,10 @@ my $good_options = GetOptions(
         'H=s' => \$host, # string
         'U=s' => \$user, # string
         'P=s' => \$password, # string
-        'w=i' => \$warning, # numeric
-        'c=i' => \$critical, # numeric
+        'w|warning:i' => \$warning, # numeric
+        'c|critical:i' => \$critical, # numeric
+        's|splunk:s' => \$splunk, # string
+        'p|port:i' => \$splunk_port, # numeric
         'help' => \$need_help, #boolean
 );
 
@@ -42,6 +47,16 @@ if ((not $good_options) or ($need_help)
         help_message();
 	# exit with status UNKNOWN
         exit 3;
+}
+if (! -x $splunk) {
+        # error message for nagios
+        print "${nagios_label} WARNING - splunk binary not executable (${splunk})\n";
+        exit 1;
+}
+if ($splunk_port !~ m/^[\d]+$/) {
+        # error message for nagios
+        print "${nagios_label} WARNING - splunk port value not an int (${splunk_port})\n";
+        exit 1;
 }
 if ($critical !~ m/^[\d]+$/) {
         # error message for nagios
@@ -56,7 +71,7 @@ if ($warning !~ m/^[\d]+$/) {
 
 # get Splunk license information
 my $search_string = "\'host=${host} index=_internal source=*/license_usage.log earliest_time=-0d\@d latest_time=now | eval mb=b/1024/1024 | stats sum(mb) as _raw\'";
-my $options = "-batch true -preview false -output rawdata -auth ${user}:${password} -uri https://${host}:8089";
+my $options = "-batch true -preview false -output rawdata -auth ${user}:${password} -uri https://${host}:${splunk_port}";
 my $output = `$splunk $splunk_command $search_string $options 2>/dev/null`;
 
 # check response
@@ -109,8 +124,10 @@ sub help_message {
         print "  -U                     username (Default: none, required)\n";
         print "  -P                     password (Default: none, required)\n";
         print "  -w, --warning          warning threshold (Default: $warning_default)\n";
-        print "  -c, --critical output file name (Default: $critical_default)\n";
+        print "  -c, --critical         critical threshold (Default: $critical_default)\n";
+        print "  -s, --splunk           splunk binary path (Default: $splunk_default)\n";
+        print "  -p, --port             splunk management tcp port (Default: $splunk_port_default)\n";
         print "  --help         print this help message\n\n";
-        print "Example: check_splunk_license.pl -H wslog01 -U admin -P changeme -w 450 -c 500\n\n";
+        print "Example: check_splunk_license.pl -H wslog01 -U admin -P changeme -w 450 -c 500 -s /opt/splunk/bin/splunk -p 8089\n\n";
 }
 
