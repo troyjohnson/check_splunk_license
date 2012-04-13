@@ -38,7 +38,7 @@ my $good_options = GetOptions(
         'c|critical:i' => \$critical, # numeric
         's|splunk:s' => \$splunk, # string
         'p|port:i' => \$splunk_port, # numeric
-        'help' => \$need_help, #boolean
+        'h|help' => \$need_help, #boolean
 );
 
 # optional values set to defaults
