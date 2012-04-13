@@ -132,7 +132,7 @@ sub help_message {
         print "  -c, --critical         critical threshold (Default: $critical_default)\n";
         print "  -s, --splunk           splunk binary path (Default: $splunk_default)\n";
         print "  -p, --port             splunk management tcp port (Default: $splunk_port_default)\n";
-        print "  --help         print this help message\n\n";
+        print "  -h, --help             print this help message\n\n";
         print "Example: check_splunk_license.pl -H wslog01 -U admin -P changeme -w 450 -c 500 -s /opt/splunk/bin/splunk -p 8089\n\n";
 }
 
