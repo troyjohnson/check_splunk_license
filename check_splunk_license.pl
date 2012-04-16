@@ -67,6 +67,7 @@ $warning = $warning || $warning_default; # 0 not allowed
 $critical = $critical || $critical_default; # 0 not allowed
 $splunk_port = $splunk_port || $splunk_port_default; # 0 not allowed
 $splunk = $splunk || $splunk_default; # empty not allowed
+$password =~ s/([;<>\*\|`&\$!#\(\)\[\]\{\}:'"])/\\$1/g; # best effort escaping
 
 if ($debug_output) {
 	print "DEBUG: warning = ${warning}\n";
