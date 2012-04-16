@@ -20,14 +20,22 @@ my $warning_default = 450;
 my $warning = 0;
 my $critical_default = 500;
 my $critical = 0;
+my $splunk_server = '/opt/splunk/bin/splunk';
+my $splunk_forwarder = '/opt/splunkforwarder/bin/splunk';
+my $splunk_default = $splunk_forwarder;
+my $splunk = '';
 my $splunk_port_default = 8089;
 my $splunk_port = 0;
-my $splunk_default = '/opt/splunk/bin/splunk';
-my $splunk = '';
+my $debug_output = 0;
 my $need_help = 0;
 my $nagios_status = "OK";
 my $nagios_label = "SPUNKLICENSE";
 my $unit = "MB";
+
+# check which splunk should be default
+if (not -x $splunk_default) {
+	$splunk_default = $splunk_server;
+}
 
 # get options
 my $good_options = GetOptions(
@@ -36,10 +44,23 @@ my $good_options = GetOptions(
         'P=s' => \$password, # string
         'w|warning:i' => \$warning, # numeric
         'c|critical:i' => \$critical, # numeric
-        's|splunk:s' => \$splunk, # string
-        'p|port:i' => \$splunk_port, # numeric
-        'h|help' => \$need_help, #boolean
+        'splunk:s' => \$splunk, # string
+        'port:i' => \$splunk_port, # numeric
+        'debug' => \$debug_output, #boolean
+        'help' => \$need_help, #boolean
 );
+
+if ($debug_output) {
+	print "DEBUG: host = ${host}\n";
+	print "DEBUG: user = ${user}\n";
+	print "DEBUG: password = ${password}\n";
+	print "DEBUG: warning = ${warning}\n";
+	print "DEBUG: critical = ${critical}\n";
+	print "DEBUG: splunk = ${splunk}\n";
+	print "DEBUG: splunk_port = ${splunk_port}\n";
+	print "DEBUG: debug_output = ${debug_output}\n";
+	print "DEBUG: need help = ${need_help}\n";
+}
 
 # optional values set to defaults
 $warning = $warning || $warning_default; # 0 not allowed
@@ -47,13 +68,20 @@ $critical = $critical || $critical_default; # 0 not allowed
 $splunk_port = $splunk_port || $splunk_port_default; # 0 not allowed
 $splunk = $splunk || $splunk_default; # empty not allowed
 
+if ($debug_output) {
+	print "DEBUG: warning = ${warning}\n";
+	print "DEBUG: critical = ${critical}\n";
+	print "DEBUG: splunk = ${splunk}\n";
+	print "DEBUG: splunk_port = ${splunk_port}\n";
+}
+
 if ((not $good_options) or ($need_help)
                 or (not $host) or (not $user) or (not $password)) {
         help_message();
 	# exit with status UNKNOWN
         exit 3;
 }
-if (! -x $splunk) {
+if (not -x $splunk) {
         # error message for nagios
         print "${nagios_label} WARNING - splunk binary not executable (${splunk})\n";
         exit 1;
@@ -78,6 +106,12 @@ if ($warning !~ m/^[\d]+$/) {
 my $search_string = "\'host=${host} index=_internal source=*/license_usage.log earliest_time=-0d\@d latest_time=now | eval mb=b/1024/1024 | stats sum(mb) as _raw\'";
 my $options = "-batch true -preview false -output rawdata -auth ${user}:${password} -uri https://${host}:${splunk_port}";
 my $output = `$splunk $splunk_command $search_string $options 2>/dev/null`;
+
+if ($debug_output) {
+	print "DEBUG: search_string = ${search_string}\n";
+	print "DEBUG: options = ${options}\n";
+	print "DEBUG: output = ${output}\n";
+}
 
 # check response
 if (not $output) {
@@ -130,9 +164,10 @@ sub help_message {
         print "  -P                     password (Default: none, required)\n";
         print "  -w, --warning          warning threshold (Default: $warning_default)\n";
         print "  -c, --critical         critical threshold (Default: $critical_default)\n";
-        print "  -s, --splunk           splunk binary path (Default: $splunk_default)\n";
-        print "  -p, --port             splunk management tcp port (Default: $splunk_port_default)\n";
-        print "  -h, --help             print this help message\n\n";
+        print "  --splunk               splunk binary path (Default: $splunk_default)\n";
+        print "  --port                 splunk management tcp port (Default: $splunk_port_default)\n";
+        print "  --debug                turn on debug output (Default: off)\n";
+        print "  --help                 print this help message\n\n";
         print "Example: check_splunk_license.pl -H wslog01 -U admin -P changeme -w 450 -c 500 -s /opt/splunk/bin/splunk -p 8089\n\n";
 }
 
