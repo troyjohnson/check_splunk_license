@@ -70,6 +70,7 @@ $splunk = $splunk || $splunk_default; # empty not allowed
 $password =~ s/([;<>\*\|`&\$!#\(\)\[\]\{\}:'"])/\\$1/g; # best effort escaping
 
 if ($debug_output) {
+	print "DEBUG: password = ${password}\n";
 	print "DEBUG: warning = ${warning}\n";
 	print "DEBUG: critical = ${critical}\n";
 	print "DEBUG: splunk = ${splunk}\n";
