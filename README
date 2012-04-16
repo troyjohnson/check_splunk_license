@@ -7,20 +7,20 @@ know for sure.
 
 The Nagios 'command' configuration:
 
-check_splunk_license.cfg
+nagios/check_splunk_license.cfg
 
 Configuration for the read protected (usually mode 600) Nagios include file:
 
-resource.cfg
+nagios/resource.cfg
 
 Some configuration options for the 'nagiosgraph' package:
 
-check_splunk_license.ncfg
-alternative_check_splunk_license.ncfg
+nagiosgrapher/check_splunk_license.ncfg
+nagiosgrapher/alternative_check_splunk_license.ncfg
 
 An example service configuration:
 
-mysplunkserver.cfg
+nagios/mysplunkserver.cfg
 
 The Nagios 'check' script:
 
