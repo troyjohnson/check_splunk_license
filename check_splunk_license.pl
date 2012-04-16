@@ -120,11 +120,16 @@ if (not $output) {
         print "${nagios_label} ${nagios_status} - command response unsuccessful\n";
         exit 3;
 }
+if ($output =~ m/Splunk is not running/) {
+        # error message for nagios
+        $nagios_status = "UNKNOWN";
+        print "${nagios_label} ${nagios_status} - cannot connect to Splunk (server: ${host}:${splunk_port})\n";
+        exit 3;
+}
 
 # parse content
 my $pattern = "([\\d.]+)";
 my ($usage) = $output =~ m/$pattern/;
-#print "pattern=${pattern}\n";
 
 if (not defined $usage) {
         # error message for nagios
@@ -132,7 +137,7 @@ if (not defined $usage) {
         print "${nagios_label} ${nagios_status} - usage not defined (response content: ${output})\n";
         exit 3;
 }
-if ($usage !~ m/^[\d.]+$/) {
+if ($usage !~ m/^\d+\.\d+$/) {
         # error message for nagios
         $nagios_status = "UNKNOWN";
         print "${nagios_label} ${nagios_status} - usage not a float (reported usage: ${usage})\n";
