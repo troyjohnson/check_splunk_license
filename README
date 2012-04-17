@@ -1,32 +1,39 @@
 
 check_splunk_license
+--------------------
 
-A Nagios check reporting the current licensed usage of a Splunk server.
-Requires a local splunk installation, might work with a forwarder, I don't
-know for sure.
+A Nagios check reporting the current licensed usage of a Splunk server
+in megabytes.
 
-The Nagios 'command' configuration:
-
-nagios/check_splunk_license.cfg
-
-Configuration for the read protected (usually mode 600) Nagios include file:
-
-nagios/resource.cfg
-
-Some configuration options for the 'nagiosgraph' package:
-
-nagiosgrapher/check_splunk_license.ncfg
-nagiosgrapher/alternative_check_splunk_license.ncfg
-
-An example service configuration:
-
-nagios/mysplunkserver.cfg
+Requirements:
+   1) a standard working Perl installation
+   2) a local Splunk installation (server or forwarder)
 
 The Nagios 'check' script:
 
-check_splunk_license.pl
+   check_splunk_license.pl
 
-Put it in with all the other Nagios checks (directory usually set in $USER1$).
+Place it with the other Nagios checks (directory usually set in $USER1$).
+
+Example Configuration Files
+---------------------------
+
+The Nagios 'command' configuration:
+
+   nagios/check_splunk_license.cfg
+
+Configuration for the read protected (usually mode 600) Nagios include file:
+
+   nagios/resource.cfg
+
+An example service configuration:
+
+   nagios/mysplunkserver.cfg
+
+Some configuration options for the 'nagiosgraph' package:
+
+   nagiosgrapher/check_splunk_license.ncfg
+   nagiosgrapher/alternative_check_splunk_license.ncfg
 
 -- Troy Johnson <troy@jdmz.net>
 
