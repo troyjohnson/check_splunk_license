@@ -35,5 +35,13 @@ Some configuration options for the 'nagiosgraph' package:
    nagiosgrapher/check_splunk_license.ncfg
    nagiosgrapher/alternative_check_splunk_license.ncfg
 
+License
+-------
+
+For now I am attaching the GPL to the code, but please let me know 
+if you want another one.
+
+   LICENSE
+
 -- Troy Johnson <troy@jdmz.net>
 
