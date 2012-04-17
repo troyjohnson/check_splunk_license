@@ -1,7 +1,5 @@
-
 check_splunk_license
 --------------------
-
 A Nagios check reporting the current licensed usage of a Splunk server
 in megabytes.
 
@@ -17,7 +15,6 @@ Place it with the other Nagios checks (directory usually set in $USER1$).
 
 Example Configuration Files
 ---------------------------
-
 The Nagios 'command' configuration:
 
    nagios/check_splunk_license.cfg
@@ -37,11 +34,9 @@ Some configuration options for the 'nagiosgraph' package:
 
 License
 -------
-
 For now I am attaching the GPL to the code, but please let me know 
 if you want another one.
 
    LICENSE
 
 -- Troy Johnson <troy@jdmz.net>
-
