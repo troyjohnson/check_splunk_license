@@ -1,3 +1,4 @@
+
 check_splunk_license
 --------------------
 A Nagios check reporting the current licensed usage of a Splunk server
@@ -40,3 +41,4 @@ if you want another one.
    LICENSE
 
 -- Troy Johnson <troy@jdmz.net>
+
