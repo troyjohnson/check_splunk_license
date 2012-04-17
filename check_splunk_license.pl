@@ -105,7 +105,7 @@ if ($warning !~ m/^[\d]+$/) {
 }
 
 # get Splunk license information
-my $search_string = "\'host=${host} index=_internal source=*/license_usage.log earliest_time=-0d\@d latest_time=now | eval mb=b/1024/1024 | stats sum(mb) as _raw\'";
+my $search_string = "\'host=${host} index=_internal source=*/license_usage.log earliest_time=-0d\@d latest_time=now type!=RolloverSummary | eval mb=b/1024/1024 | stats sum(mb) as _raw\'";
 my $options = "-batch true -preview false -output rawdata -auth ${user}:${password} -uri https://${host}:${splunk_port}";
 my $output = `$splunk $splunk_command $search_string $options 2>/dev/null`;
 
