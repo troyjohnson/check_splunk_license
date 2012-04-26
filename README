@@ -14,6 +14,10 @@ The Nagios 'check' script:
 
 Place it with the other Nagios checks (directory usually set in $USER1$).
 
+Find more information about what the check is supposed to do here:
+
+  http://wiki.splunk.com/Community:TroubleshootingIndexedDataVolume
+
 Example Configuration Files
 ---------------------------
 The Nagios 'command' configuration:
