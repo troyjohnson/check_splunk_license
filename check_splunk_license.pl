@@ -16,6 +16,8 @@ my $splunk_command = 'search';
 my $user = '';
 my $password = '';
 my $host = '';
+my $check_all_hosts = 0;
+my $command_host = '';
 my $warning_default = 450;
 my $warning = 0;
 my $critical_default = 500;
@@ -46,6 +48,7 @@ my $good_options = GetOptions(
         'c|critical:i' => \$critical, # numeric
         'splunk:s' => \$splunk, # string
         'port:i' => \$splunk_port, # numeric
+        'a|all' => \$check_all_hosts, # boolean
         'debug' => \$debug_output, #boolean
         'help' => \$need_help, #boolean
 );
@@ -58,6 +61,7 @@ if ($debug_output) {
 	print "DEBUG: critical = ${critical}\n";
 	print "DEBUG: splunk = ${splunk}\n";
 	print "DEBUG: splunk_port = ${splunk_port}\n";
+	print "DEBUG: check_all_hosts = ${check_all_hosts}\n";
 	print "DEBUG: debug_output = ${debug_output}\n";
 	print "DEBUG: need help = ${need_help}\n";
 }
@@ -68,6 +72,10 @@ $critical = $critical || $critical_default; # 0 not allowed
 $splunk_port = $splunk_port || $splunk_port_default; # 0 not allowed
 $splunk = $splunk || $splunk_default; # empty not allowed
 $password =~ s/([;<>\*\|`&\$!#\(\)\[\]\{\}:'"])/\\$1/g; # best effort escaping
+$command_host = $host;
+if ($check_all_hosts) {
+	$command_host = '*';
+}
 
 if ($debug_output) {
 	print "DEBUG: password = ${password}\n";
@@ -75,6 +83,7 @@ if ($debug_output) {
 	print "DEBUG: critical = ${critical}\n";
 	print "DEBUG: splunk = ${splunk}\n";
 	print "DEBUG: splunk_port = ${splunk_port}\n";
+	print "DEBUG: command_host = ${command_host}\n";
 }
 
 if ((not $good_options) or ($need_help)
@@ -105,7 +114,7 @@ if ($warning !~ m/^[\d]+$/) {
 }
 
 # get Splunk license information (version 4.2.1 - 4.3.2)
-my $search_string = "\'host=${host} index=_internal source=*/license_usage.log earliest_time=-0d\@d latest_time=now NOT type=RolloverSummary | eval mb=b/1024/1024 | stats sum(mb) as _raw\'";
+my $search_string = "\'host=${command_host} index=_internal source=*/license_usage.log earliest_time=-0d\@d latest_time=now NOT type=RolloverSummary | eval mb=b/1024/1024 | stats sum(mb) as _raw\'";
 my $options = "-batch true -preview false -output rawdata -auth ${user}:${password} -uri https://${host}:${splunk_port}";
 my $output = `$splunk $splunk_command $search_string $options 2>/dev/null`;
 
@@ -173,6 +182,7 @@ sub help_message {
         print "  -c, --critical         critical threshold (Default: $critical_default)\n";
         print "  --splunk               splunk binary path (Default: $splunk_default)\n";
         print "  --port                 splunk management tcp port (Default: $splunk_port_default)\n";
+        print "  -a, --all              check all hosts (Default: off)\n";
         print "  --debug                turn on debug output (Default: off)\n";
         print "  --help                 print this help message\n\n";
         print "Example: check_splunk_license.pl -H wslog01 -U admin -P changeme -w 450 -c 500 -s /opt/splunk/bin/splunk -p 8089\n\n";
