@@ -17,6 +17,7 @@ Place it with the other Nagios checks (directory usually set in $USER1$).
 Find more information about what the check is supposed to do here:
 
   http://wiki.splunk.com/Community:TroubleshootingIndexedDataVolume
+  http://docs.splunk.com/Documentation/Splunk/latest/Installation/AboutSplunklicenses#View_your_license_and_usage_details
 
 Example Configuration Files
 ---------------------------
