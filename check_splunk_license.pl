@@ -7,8 +7,10 @@
 # modules
 use Getopt::Long;
 use strict;
+use vars '$VERSION';
 
 # constants
+$VERSION = '1.0.1';
 my $license_usage = 0;
 my $splunk_command = 'search';
 
@@ -148,10 +150,10 @@ if (not defined $usage) {
         print "${nagios_label} ${nagios_status} - usage not defined (response content: ${output})\n";
         exit 3;
 }
-if ($usage !~ m/^\d+\.\d+$/) {
+if ($usage !~ m/^\d+\.*\d*$/) {
         # error message for nagios
         $nagios_status = "UNKNOWN";
-        print "${nagios_label} ${nagios_status} - usage not a float (reported usage: ${usage})\n";
+        print "${nagios_label} ${nagios_status} - usage not a number (reported usage: ${usage})\n";
         exit 3;
 }
 
